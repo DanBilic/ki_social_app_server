@@ -21,10 +21,7 @@ dotenv.config({ path: "./config/config.env" });
 connectDB();
 
 //import Route dateien
-const blogs = require("./routes/blogs");
-const posts = require("./routes/posts");
 const auth = require("./routes/auth");
-const reviews = require("./routes/reviews");
 
 const app = express();
 
@@ -56,9 +53,6 @@ if (process.env.NODE_ENV === "development") {
 
 // app.use(customLogger);
 
-// File upload middleware
-app.use(fileupload());
-
 //set static folder
 // path.join(__dirname, "public") -> joins files and folders together
 // !! static folder can be accessed in the browser with url:
@@ -66,10 +60,7 @@ app.use(fileupload());
 app.use(express.static(path.join(__dirname, "public")));
 
 //Mount routers
-app.use("/api/v1/blogs", blogs);
-app.use("/api/v1/posts", posts);
 app.use("/api/v1/auth", auth);
-app.use("/api/v1/reviews", reviews);
 
 // Middleware for error handling last!
 app.use(errorHandler);

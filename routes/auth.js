@@ -1,21 +1,24 @@
 const express = require("express");
+const passport = require("passport");
+
 const {
   registerUser,
-  login,
-  getCurrentUser,
-  updateUser,
-  updatePassword,
+  redirectUser,
   logoutUser,
+  currentUser,
 } = require("../controllers/auth");
 
 const router = express.Router();
-const { protectRoute } = require("../middleware/protectRoute");
+const protectRoute = require("../middleware/protectRoute");
 
-router.post("/register", registerUser);
-router.post("/login", login);
-router.get("/current_user", protectRoute, getCurrentUser);
-router.put("/update_user", protectRoute, updateUser);
-router.put("/update_password", protectRoute, updatePassword);
-router.get("/logout_user", protectRoute, logoutUser);
+router.get(
+  "/google",
+  passport.authenticate("google", {
+    scope: ["profile", "email"],
+  })
+);
+router.get("/google/callback", passport.authenticate("google"), redirectUser);
+router.get("/logout", logoutUser);
+router.get("/current_user", protectRoute, currentUser);
 
 module.exports = router;

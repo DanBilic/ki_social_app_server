@@ -1,4 +1,4 @@
-const CustomErrorResponse = require("../utils/customErrorResponse");
+const CustomError = require("../utils/customError");
 
 const errorHandler = (err, req, res, next) => {
   //    copy of err object
@@ -15,19 +15,19 @@ const errorHandler = (err, req, res, next) => {
   //    mongoose bad Object id
   if (err.name === "CastError") {
     const message = `Ressource not found with given id ${err.value}`;
-    error = new CustomErrorResponse(message, 404);
+    error = new CustomError(message, 404);
   }
   //  mongoose duplictae key error -> code is 11000
   if (err.code === 11000) {
     const message = "Ressource already exists please create a new one";
     // 400 -> bad request
-    error = new CustomErrorResponse(message, 400);
+    error = new CustomError(message, 400);
   }
 
   //    mongoose validation error
   if (err.name === "ValidationError") {
     const message = Object.values(err.errors).map((value) => value.message);
-    error = new CustomErrorResponse(message, 400);
+    error = new CustomError(message, 400);
   }
 
   res.status(error.statusCode || 500).json({
