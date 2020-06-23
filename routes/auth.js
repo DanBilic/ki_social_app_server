@@ -19,6 +19,6 @@ router.get(
 );
 router.get("/google/callback", passport.authenticate("google"), redirectUser);
 router.get("/logout", logoutUser);
-router.get("/current_user", protectRoute, currentUser);
+router.get("/current_user", currentUser);
 
 module.exports = router;

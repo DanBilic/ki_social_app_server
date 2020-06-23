@@ -4,7 +4,8 @@ const dotenv = require("dotenv");
 const customLogger = require("./middleware/customLogger");
 const morgan = require("morgan");
 const connectDB = require("./config/mongo_db");
-const cookieParser = require("cookie-parser");
+//const cookieParser = require("cookie-parser");
+const cookieSession = require("cookie-session");
 const colors = require("colors");
 const errorHandler = require("./middleware/error");
 const fileupload = require("express-fileupload");
@@ -14,8 +15,14 @@ const helmet = require("helmet");
 const rateLimit = require("express-rate-limit");
 const cors = require("cors");
 
+const passport = require("passport");
+
 //load environment variables
 dotenv.config({ path: "./config/config.env" });
+
+//mongoose models import
+require("./models/User");
+require("./services/passport");
 
 //Connect to mongo DB
 connectDB();
@@ -43,13 +50,21 @@ app.use(cors());
 //  apply to all requests
 app.use(limiter);
 
-//cookieParser allows access to req.cookie and res.cookie
-app.use(cookieParser());
+//enable cookies for the app
+app.use(
+  cookieSession({
+    maxAge: 30 * 24 * 60 * 60 * 1000,
+    keys: [process.env.COOKIE_KEY],
+  })
+);
 
 //DEVELOPMENT logging middleware
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
 }
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 // app.use(customLogger);
 
@@ -66,7 +81,7 @@ app.use("/api/v1/auth", auth);
 app.use(errorHandler);
 
 //default PORT ist 6000
-const PORT = process.env.PORT || 6000;
+const PORT = process.env.PORT || 4000;
 
 const server = app.listen(
   PORT,
