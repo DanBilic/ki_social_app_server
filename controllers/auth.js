@@ -7,7 +7,7 @@ const asyncHandler = require("../middleware/asyncHandler");
 //@route    GET /api/v1/auth/google/callback
 //@acess    Public
 exports.redirectUser = asyncHandler(async (req, res, next) => {
-  res.redirect("/");
+  res.redirect("/paws");
 });
 
 //@desc     logout user

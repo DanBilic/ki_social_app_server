@@ -22,6 +22,7 @@ dotenv.config({ path: "./config/config.env" });
 
 //mongoose models import
 require("./models/User");
+require("./models/Paw");
 require("./services/passport");
 
 //Connect to mongo DB
@@ -29,6 +30,7 @@ connectDB();
 
 //import Route dateien
 const auth = require("./routes/auth");
+const paw = require("./routes/paw");
 
 const app = express();
 
@@ -76,6 +78,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 //Mount routers
 app.use("/api/v1/auth", auth);
+app.use("/api/v1/paws", paw);
 
 // Middleware for error handling last!
 app.use(errorHandler);
